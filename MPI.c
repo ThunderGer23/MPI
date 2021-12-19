@@ -1,136 +1,93 @@
 #include <mpi.h>
 #include <stdio.h>
 #include<stdlib.h>
-#define tam 100
+#define Lenght 100
 
 
 typedef struct resulM{
-	int coorC_a;
-	int coorC_b;
+	int xCoor;
+	int yCoor;
 }resulM;
 
-int ma[tam][tam];
-int mb[tam][tam];
-int mc[tam][tam];
-int i,j,k;
-int imain,jmain;
-resulM aux,coorfal;
+int matA[Lenght][Lenght];
+int matB[Lenght][Lenght];
+int matC[Lenght][Lenght];
+
+resulM aux,coorfalt;
 
 
-void matricesLlenado(int a[tam][tam],int num);
-void imprimirMatriz(int b[tam][tam]);
+void matricesLlenado(int a[Lenght][Lenght],int num);
+void imprimirMatriz(int b[Lenght][Lenght]);
 void imprimirCoorHechas(int g, int f);
-void CmatrizCoordenadas(int c, int d, int maa[tam][tam], int mbb[tam][tam], int mcc[tam][tam]);
+void CmatrizCoordenadas(int c, int d, int maa[Lenght][Lenght], int mbb[Lenght][Lenght], int mcc[Lenght][Lenght]);
 void chequeoMatrizC(int mc1[100][100]);
 
 
-int main(int argc, char** argv) {
-    // Initialize the MPI environment
+int main(int argc, char** argv) {    
     MPI_Init(NULL, NULL);
-
-    // Get the number of processes
+    
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
-
-    // Get the rank of the process
+    
     int world_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-
-    // Get the name of the processor
+    
     char processor_name[MPI_MAX_PROCESSOR_NAME];
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
-
-    // Print off a hello world message
+    
     printf("Hello world from processor %s, rank %d out of %d processors\n",
            processor_name, world_rank, world_size);
 
-
-
-    matricesLlenado(ma,1);
-	printf("\nMatriz ma creada.\n");
-	matricesLlenado(mb,1);
-	printf("\nMatriz mb creada.\n");
+    matricesLlenado(matA,1);
+	printf("\nMatriz matA creada.\n");
+	matricesLlenado(matB,1);
+	printf("\nMatriz matB creada.\n");
 	matricesLlenado(mc,0);
 	printf("\nMatriz mc creada.\n");
-	printf("\n");
-	//imprimirMatrices(ma);
-	for(imain=0;imain<tam;imain++){
-		for(jmain=0;jmain<tam;jmain++){
-			CmatrizCoordenadas(imain,jmain,ma,mb,mc);
+	printf("\n");	
+	for(int imain=0;imain<Lenght;imain++){
+		for(int jmain=0;jmain<Lenght;jmain++){
+			CmatrizCoordenadas(imain,jmain,matA,matB,matC);
 		}
 	}
-	/*CmatrizCoordenadas(0,0,ma,mb,mc);
-	CmatrizCoordenadas(73,73,ma,mb,mc);*/
-	//imprimirMatriz(mc);
 	printf("\n AFEASDF\n");
-	imprimirMatriz(mc);
-	//imprimirCoorHechas(aux.coorC_a,aux.coorC_b);
-
-
-
-
-    // Finalize the MPI environment.
+	imprimirMatriz(matC);
     MPI_Finalize();
 }
 
-void matricesLlenado(int a[tam][tam], int num){
-	for(i=0;i<tam;i++){
-		for(j=0;j<tam;j++){
+void matricesLlenado(int a[Lenght][Lenght], int num){
+	for(int i=0;i<Lenght;i++){
+		for(int j=0;j<Lenght;j++){
 			a[i][j]=num;
 			printf("%d",a[i][j]);
 		}	
 	}
 }
 
-void imprimirMatriz(int b[tam][tam]){
-	/*for(i=0;i<100;i++){
-		printf("\nFila terminada.\n");
-		for(j=0;j<100;j++){
-			printf("%d ",b[i][j]);
-		}
-		printf("\n");
-	}*/
-	for(i=0;i<tam;i++){
-		for(j=0;j<tam;j++){
+void imprimirMatriz(int b[Lenght][Lenght]){
+	for(int i=0;i<Lenght;i++){
+		for(int j=0;j<Lenght;j++){
 			printf("%d ",b[i][j]);
 		}	
 	}
 	printf("\n");
 }
 
-void CmatrizCoordenadas(int c, int d, int maa[tam][tam], int mbb[tam][tam], int mcc[tam][tam]){
-	//printf("\nDebbugeo 0.\n");
+void CmatrizCoordenadas(int c, int d, int maa[Lenght][Lenght], int mbb[Lenght][Lenght], int mcc[Lenght][Lenght]){	
 	int aux1=0;
-	for(i=0;i<tam;i++){
-		for(j=0;j<tam;j++){
+	for(int i=0;i<Lenght;i++){
+		for(int j=0;j<Lenght;j++){
 			mcc[c][d] = 0;
-			for(k=0;k<tam;k++){
+			for(int k=0;k<Lenght;k++){
 				mcc[c][d]=mcc[c][d]+maa[i][k]*mbb[k][j];
-			} 
-			//printf("\nDebbugeo 1. %d\n",j);
+			} 			
 		}
 	}
 	printf("\n%d \n",mcc[c][d]);
-	aux.coorC_a=c;
-	aux.coorC_b=d;
-	imprimirCoorHechas(aux.coorC_a,aux.coorC_b);
-	//printf("\nDebbugeo 2.\n");
-	/*while(1){
-		for(i=0;i<100;i++){
-			for(j=0;j<100;j++){
-				if(mcc[i][j]==0){
-					aux.coorC_a=i;
-					aux.coorC_b=j;
-					printf("\nCoordenada de mc creada.\n");
-					break;
-				}
-				if(j==99){
-					break;
-				}
-			}
-		}
-	}*/
+	aux.xCoor=c;
+	aux.yCoor=d;
+	imprimirCoorHechas(aux.xCoor,aux.yCoor);
 }
 
 void imprimirCoorHechas(int g,int f){
@@ -138,13 +95,13 @@ void imprimirCoorHechas(int g,int f){
 	printf("\nSegunda coordenada: %d\n",f);
 }
 
-void chequeoMatrizC(int mc1[tam][tam]){
+void chequeoMatrizC(int mc1[Lenght][Lenght]){
 	
-	for(i=0;i<tam;i++){
-		for(j=0;j<tam;j++){
+	for(int i=0;i<Lenght;i++){
+		for(int j=0;j<Lenght;j++){
 			if(mc1[i][j]==0){
-				coorfal.coorC_a=i;
-				coorfal.coorC_b=j;
+				coorfalt.xCoor=i;
+				coorfalt.yCoor=j;
 				printf("Encontrada matriz distinta a 0.\n");
 			}
 		}
