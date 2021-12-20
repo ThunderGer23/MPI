@@ -1,25 +1,25 @@
 #include <mpi.h>
 #include <stdio.h>
 #include<stdlib.h>
-#define Lenght 100
 
 
-typedef struct resulM{
+typedef struct rM{
 	int xCoor;
 	int yCoor;
-}resulM;
+}rM;
 
-int matA[Lenght][Lenght];
-int matB[Lenght][Lenght];
-int matC[Lenght][Lenght];
+int Len = 100;
+int matA[Len][Len];
+int matB[Len][Len];
+int matC[Len][Len];
 
-resulM aux,coorfalt;
+rM aux,coorfalt;
 
 
-void matricesLlenado(int a[Lenght][Lenght],int num);
-void imprimirMatriz(int b[Lenght][Lenght]);
+void matricesLlenado(int a[Len][Len],int num);
+void imprimirMatriz(int b[Len][Len]);
 void imprimirCoorHechas(int g, int f);
-void CmatrizCoordenadas(int c, int d, int maa[Lenght][Lenght], int mbb[Lenght][Lenght], int mcc[Lenght][Lenght]);
+void CmatrizCoordenadas(int c, int d, int maa[Len][Len], int mbb[Len][Len], int mcc[Len][Len]);
 void chequeoMatrizC(int mc1[100][100]);
 
 
@@ -46,8 +46,8 @@ int main(int argc, char** argv) {
 	matricesLlenado(mc,0);
 	printf("\nMatriz mc creada.\n");
 	printf("\n");	
-	for(int imain=0;imain<Lenght;imain++){
-		for(int jmain=0;jmain<Lenght;jmain++){
+	for(int imain=0;imain<Len;imain++){
+		for(int jmain=0;jmain<Len;jmain++){
 			CmatrizCoordenadas(imain,jmain,matA,matB,matC);
 		}
 	}
@@ -56,30 +56,30 @@ int main(int argc, char** argv) {
     MPI_Finalize();
 }
 
-void matricesLlenado(int a[Lenght][Lenght], int num){
-	for(int i=0;i<Lenght;i++){
-		for(int j=0;j<Lenght;j++){
+void matricesLlenado(int a[Len][Len], int num){
+	for(int i=0;i<Len;i++){
+		for(int j=0;j<Len;j++){
 			a[i][j]=num;
 			printf("%d",a[i][j]);
 		}	
 	}
 }
 
-void imprimirMatriz(int b[Lenght][Lenght]){
-	for(int i=0;i<Lenght;i++){
-		for(int j=0;j<Lenght;j++){
+void imprimirMatriz(int b[Len][Len]){
+	for(int i=0;i<Len;i++){
+		for(int j=0;j<Len;j++){
 			printf("%d ",b[i][j]);
 		}	
 	}
 	printf("\n");
 }
 
-void CmatrizCoordenadas(int c, int d, int maa[Lenght][Lenght], int mbb[Lenght][Lenght], int mcc[Lenght][Lenght]){	
+void CmatrizCoordenadas(int c, int d, int maa[Len][Len], int mbb[Len][Len], int mcc[Len][Len]){	
 	int aux1=0;
-	for(int i=0;i<Lenght;i++){
-		for(int j=0;j<Lenght;j++){
+	for(int i=0;i<Len;i++){
+		for(int j=0;j<Len;j++){
 			mcc[c][d] = 0;
-			for(int k=0;k<Lenght;k++){
+			for(int k=0;k<Len;k++){
 				mcc[c][d]=mcc[c][d]+maa[i][k]*mbb[k][j];
 			} 			
 		}
@@ -95,10 +95,10 @@ void imprimirCoorHechas(int g,int f){
 	printf("\nSegunda coordenada: %d\n",f);
 }
 
-void chequeoMatrizC(int mc1[Lenght][Lenght]){
+void chequeoMatrizC(int mc1[Len][Len]){
 	
-	for(int i=0;i<Lenght;i++){
-		for(int j=0;j<Lenght;j++){
+	for(int i=0;i<Len;i++){
+		for(int j=0;j<Len;j++){
 			if(mc1[i][j]==0){
 				coorfalt.xCoor=i;
 				coorfalt.yCoor=j;
