@@ -16,7 +16,7 @@ int Mat[Len][Len];
 int Mat1[Len][Len];
 int Mat2[Len][Len];
 
-rM Aux,coorfalt;
+rM coorfalt;
 
 int main(int argc, char** argv) {    
     MPI_Init(NULL, NULL);
@@ -68,10 +68,8 @@ void matCoorC(int c, int d, int matAA[Len][Len], int matBB[Len][Len], int matCC[
 		}
 	}
 	printf("\n%d \n",matCC[c][d]);
-	Aux.xCoor=c;
-	Aux.yCoor=d;	
-	printf("\nPrimer coordenada: %d\n",coorInit);
-	printf("\nSegunda coordenada: %d\n",coorSecond);
+	printf("\nPrimer coordenada: %d\n",c);
+	printf("\nSegunda coordenada: %d\n",d);
 }
 
 void imprimirMatriz(int b[Len][Len]){
