@@ -2,26 +2,21 @@
 #include <stdio.h>
 #include<stdlib.h>
 
+int Len = 100;
+void matricesLlenado(int a[Len][Len],int num);
+void matCoorC(int c, int d, int matAA[Len][Len], int matBB[Len][Len], int matCC[Len][Len]);
+void imprimirMatriz(int b[Len][Len]);
 
 typedef struct rM{
 	int xCoor;
 	int yCoor;
 }rM;
 
-int Len = 100;
-int matA[Len][Len];
-int matB[Len][Len];
-int matC[Len][Len];
+int Mat[Len][Len];
+int Mat1[Len][Len];
+int Mat2[Len][Len];
 
-rM aux,coorfalt;
-
-
-void matricesLlenado(int a[Len][Len],int num);
-void imprimirMatriz(int b[Len][Len]);
-void imprimirCoorHechas(int g, int f);
-void CmatrizCoordenadas(int c, int d, int maa[Len][Len], int mbb[Len][Len], int mcc[Len][Len]);
-void chequeoMatrizC(int mc1[100][100]);
-
+rM Aux,coorfalt;
 
 int main(int argc, char** argv) {    
     MPI_Init(NULL, NULL);
@@ -35,24 +30,21 @@ int main(int argc, char** argv) {
     char processor_name[MPI_MAX_PROCESSOR_NAME];
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
-    
-    printf("Hello world from processor %s, rank %d out of %d processors\n",
-           processor_name, world_rank, world_size);
 
-    matricesLlenado(matA,1);
-	printf("\nMatriz matA creada.\n");
-	matricesLlenado(matB,1);
-	printf("\nMatriz matB creada.\n");
+    matricesLlenado(Mat,1);
+	printf("\nMatriz Mat creada.\n");
+	matricesLlenado(Mat1,1);
+	printf("\nMatriz Mat1 creada.\n");
 	matricesLlenado(mc,0);
 	printf("\nMatriz mc creada.\n");
 	printf("\n");	
 	for(int imain=0;imain<Len;imain++){
 		for(int jmain=0;jmain<Len;jmain++){
-			CmatrizCoordenadas(imain,jmain,matA,matB,matC);
+			matCoorC(imain,jmain,Mat,Mat1,Mat2);
 		}
 	}
-	printf("\n AFEASDF\n");
-	imprimirMatriz(matC);
+	
+	imprimirMatriz(Mat2);
     MPI_Finalize();
 }
 
@@ -65,45 +57,28 @@ void matricesLlenado(int a[Len][Len], int num){
 	}
 }
 
-void imprimirMatriz(int b[Len][Len]){
-	for(int i=0;i<Len;i++){
-		for(int j=0;j<Len;j++){
-			printf("%d ",b[i][j]);
-		}	
-	}
-	printf("\n");
-}
 
-void CmatrizCoordenadas(int c, int d, int maa[Len][Len], int mbb[Len][Len], int mcc[Len][Len]){	
-	int aux1=0;
-	for(int i=0;i<Len;i++){
-		for(int j=0;j<Len;j++){
-			mcc[c][d] = 0;
-			for(int k=0;k<Len;k++){
-				mcc[c][d]=mcc[c][d]+maa[i][k]*mbb[k][j];
+void matCoorC(int c, int d, int matAA[Len][Len], int matBB[Len][Len], int matCC[Len][Len]){		
+	for(int x=0;x<Len;x++){
+		for(int y=0;y<Len;y++){
+			matCC[c][d] = 0;
+			for(int z=0;z<Len;z++){
+				matCC[c][d]+=matAA[x][z]*matBB[z][y];
 			} 			
 		}
 	}
-	printf("\n%d \n",mcc[c][d]);
-	aux.xCoor=c;
-	aux.yCoor=d;
-	imprimirCoorHechas(aux.xCoor,aux.yCoor);
+	printf("\n%d \n",matCC[c][d]);
+	Aux.xCoor=c;
+	Aux.yCoor=d;	
+	printf("\nPrimer coordenada: %d\n",coorInit);
+	printf("\nSegunda coordenada: %d\n",coorSecond);
 }
 
-void imprimirCoorHechas(int g,int f){
-	printf("\nPrimer coordenada: %d\n",g);
-	printf("\nSegunda coordenada: %d\n",f);
-}
-
-void chequeoMatrizC(int mc1[Len][Len]){
-	
-	for(int i=0;i<Len;i++){
-		for(int j=0;j<Len;j++){
-			if(mc1[i][j]==0){
-				coorfalt.xCoor=i;
-				coorfalt.yCoor=j;
-				printf("Encontrada matriz distinta a 0.\n");
-			}
-		}
+void imprimirMatriz(int b[Len][Len]){
+	for(int x=0;x<Len;x++){
+		for(int y=0;y<Len;y++){
+			printf("%d ",b[x][y]);
+		}	
 	}
+	printf("\n");
 }
